@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Toxy Chat</title>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+</head>
+<body>
+    <div id="messages"></div>
+    <form id="form" action="">
+        <label for="input"></label>
+        <input id="input" autocomplete="off" />
+        <button>Send</button>
+    </form>
+    <script>
+        const socket = io();
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const messages = document.getElementById('messages');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('chat message', input.value);
+                input.value = '';
+            }
+        });
+
+        socket.on('chat message', function(msg) {
+            const item = document.createElement('li');
+            item.textContent = msg.text;
+            if (msg.isToxic) {
+                item.style.color = 'red';
+            }
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+    </script>
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            height: calc(100vh - 70px);
+        }
+
+        #messages li {
+            padding: 1em;
+            background-color: #123a70;
+            color: #fafafa;
+            margin: 0.75em;
+            border-radius: 0.5em;
+        }
+
+        #messages li:nth-child(odd) {
+            background: #13219a;
+        }
+
+        #form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            background: #333;
+            color: #fff;
+        }
+
+        #input {
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background: #666;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #444;
+        }
+
+        button:active {
+            background: #555;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        input::-webkit-input-placeholder {
+            color: #ccc;
+        }
+
+        input:-moz-placeholder {
+            color: #ccc;
+        }
+
+        input::-moz-placeholder {
+            color: #ccc;
+        }
+
+        input:-ms-input-placeholder {
+            color: #ccc;
+        }
+
+    </style>
+</body>
+</html>
