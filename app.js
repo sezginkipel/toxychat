@@ -5,7 +5,7 @@ const toxicity = require('@tensorflow-models/toxicity');
 const app = express();
 const server = http.createServer(app);
 const io = require('socket.io')(server);
-const port = 3000;
+const port = 4000;
 let model;
 
 app.use(express.static(path.join(__dirname, 'public')));
